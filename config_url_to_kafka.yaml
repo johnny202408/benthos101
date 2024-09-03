@@ -1,0 +1,19 @@
+input:
+  http_client:
+    url: https://api.chucknorris.io/jokes/random
+    verb: GET
+    headers:
+      Content-Type: application/json
+
+pipeline:
+  processors:
+    - bloblang: |
+        root = this.value.uppercase()
+
+output:
+  kafka:
+    addresses:
+      - "localhost:9092"  # Replace with your Kafka broker address
+    topic: "jokes-topic"  # Replace with your Kafka topic
+    client_id: "benthos_client"
+    key: "${!count(\"jokes\")}"  # Optional: Use a unique key for each message

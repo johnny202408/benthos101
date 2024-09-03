@@ -1,0 +1,34 @@
+version: '3'
+services:
+  zookeeper:
+    image: bitnami/zookeeper:3.8.1
+    ports:
+      - "2181:2181"
+    environment:
+      - ZOO_SERVERS=zookeeper:2888:3888
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      - benthos-network
+
+  kafka:
+    image: bitnami/kafka:3.5.0
+    ports:
+      - "9092:9092"
+      - "9093:9093"  # Controller port
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_NODE_ID=1
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+      - KAFKA_KRAFT_CLUSTER_ID=FckCSZCfQ3axKlcpa8LZaw
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@localhost:9093
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    networks:
+      - benthos-network
+
+networks:
+  benthos-network:
+    external: true
