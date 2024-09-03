@@ -12,10 +12,31 @@ docker run --rm -v /path/to/your/config_url_to_stdout.yaml:/benthos.yaml jeffail
 ```
 
 ### config file example for windows
-docker run --rm -v c:\\dev\\benthos101\\config_url_to_stdout.yaml:/benthos.yaml jeffail/benthos
+docker run --rm --name benthos01 -v c:\\dev\\benthos101\\config_url_to_stdout.yaml:/benthos.yaml jeffail/benthos
 
 ### config file example for windows - kafka
-docker run --rm -v c:\\dev\\benthos101\\config_url_to_kafka.yaml:/benthos.yaml jeffail/benthos
+docker run --rm --name benthos01 -v c:\\dev\\benthos101\\config_url_to_kafka.yaml:/benthos.yaml jeffail/benthos
+
+### config file example for windows - ES
+docker run --rm --name benthos01 -v c:\\dev\\benthos101\\config_url_to_es.yaml:/benthos.yaml jeffail/benthos
+
+### run elasticsearch
+```
+docker run --name elasticsearch -d \
+  -e discovery.type=single-node \
+  -p 9200:9200 \
+  -p 9300:9300 \
+  docker.elastic.co/elasticsearch/elasticsearch:6.8.0
+```
+
+### run elasticsearch on windows
+```
+docker run --name elasticsearch -d ^
+  -e discovery.type=single-node ^
+  -p 9200:9200 ^
+  -p 9300:9300 ^
+  docker.elastic.co/elasticsearch/elasticsearch:6.8.0
+```
 
 
 

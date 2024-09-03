@@ -10,10 +10,38 @@ pipeline:
     - bloblang: |
         root = this.value.uppercase()
 
+
+
 output:
-  kafka:
-    addresses:
-      - "localhost:9092"  # Replace with your Kafka broker address
-    topic: "jokes-topic"  # Replace with your Kafka topic
-    client_id: "benthos_client"
-    key: "${!count(\"jokes\")}"  # Optional: Use a unique key for each message
+  broker:
+    outputs:
+      - kafka:
+          addresses:
+            - kafka:9092
+          topic: chucknorris_jokes
+          client_id: benthos_client
+          max_msg_bytes: 1000000
+          compression: none
+      - stdout:
+          codec: lines
+
+# output:
+#   kafka:
+#     addresses:
+#       - kafka:9092
+#     topic: chucknorris_jokes
+#     client_id: benthos_client
+#     max_msg_bytes: 1000000
+#     compression: none
+
+#   stdout:
+#     codec: lines
+
+
+# output:
+#   kafka:
+#     addresses:
+#       - "localhost:9092"  # Replace with your Kafka broker address
+#     topic: "jokes-topic"  # Replace with your Kafka topic
+#     client_id: "benthos_client"
+#     key: "${!count(\"jokes\")}"  # Optional: Use a unique key for each message

@@ -1,0 +1,20 @@
+input:
+  http_client:
+    url: https://api.chucknorris.io/jokes/random
+    verb: GET
+    headers:
+      Content-Type: application/json
+
+pipeline:
+  processors:
+    - json_parser:
+        path: "joke"
+        target: "parsed_joke"
+
+output:
+  elasticsearch:
+    addresses:
+      - "http://localhost:9200"
+    index: "jokes"
+    type: "_doc"
+    
