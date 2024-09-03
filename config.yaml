@@ -1,0 +1,15 @@
+input:
+  http_client:
+    url: https://api.chucknorris.io/jokes/random
+    verb: GET
+    headers:
+      Content-Type: application/json
+
+pipeline:
+  processors:
+    - bloblang: |
+        root = this.value.uppercase()
+
+output:
+  stdout:
+    codec: lines
