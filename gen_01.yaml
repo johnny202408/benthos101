@@ -1,0 +1,25 @@
+input:
+  generate:
+    interval: "100ms"
+    count: 12
+    mapping: |
+      root.key = if count("key_counter") % 3 == 0 {
+        "hello "
+      } else {
+        "there "
+      }
+
+      root.content = uuid_v4()
+      root.team_info = "bojack " + uuid_v4()
+
+pipeline:
+  processors:
+    - bloblang: |
+        root = "this "
+
+output:
+  broker:
+    pattern: fan_out
+    outputs:
+      - stdout:
+          codec: lines
