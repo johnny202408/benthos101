@@ -20,7 +20,14 @@ pipeline:
 
         let iLine_number = count("line_counter")
         let sLine_number = $iLine_number.string()
-        root.row_id = $sLine_number
+        # root.row_id = $sLine_number
+        root.row_id = $iLine_number
+
+        if $iLine_number <= $MAX_OUTPUT {
+          root.filter = "in"
+        } else {
+          root.filter = "out"
+        }
 
         # if $iLine_number < $MAX_OUTPUT {
         #   root = "hello... "
