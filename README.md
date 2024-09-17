@@ -54,6 +54,13 @@ docker run -d --name kafka -p 9092:9092 --env KAFKA_ZOOKEEPER_CONNECT=localhost:
 
 ```
 
+### Run a generate example
+```
+docker run --rm --name benthos01 -v c:\\dev\\benthos101\\gen_01.yaml:/benthos.yaml jeffail/benthos
+
+```
+
+
 ### group by example
 https://stackoverflow.com/questions/71084761/how-to-use-group-by-value-to-create-batches-in-benthos
 

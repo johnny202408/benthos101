@@ -1,7 +1,7 @@
 input:
   generate:
     interval: "100ms"
-    count: 12
+    count: 4
     mapping: |
       root.key = if count("key_counter") % 3 == 0 {
         "hello "
@@ -15,8 +15,24 @@ input:
 pipeline:
   processors:
     - bloblang: |
-        root = "this "
+        let MAX_OUTPUT = 3
+        root = this
 
+        let iLine_number = count("line_counter")
+        let sLine_number = $iLine_number.string()
+        root.row_id = $sLine_number
+
+        # if $iLine_number < $MAX_OUTPUT {
+        #   root = "hello... "
+        #   # let sLine_number = $iLine_number.string()
+        #   # root.new_id = $sLine_number
+        # } else {
+        #   deleted()
+        # }
+        # root = str_line_number
+        # root = count("line_counter").string()
+
+        
 output:
   broker:
     pattern: fan_out
