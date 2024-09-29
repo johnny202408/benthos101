@@ -26,18 +26,10 @@ pipeline:
         if $iLine_number <= $MAX_OUTPUT {
           root.filter = "in"
         } else {
+          # deleted()
           root.filter = "out"
+          root = ""
         }
-
-        # if $iLine_number < $MAX_OUTPUT {
-        #   root = "hello... "
-        #   # let sLine_number = $iLine_number.string()
-        #   # root.new_id = $sLine_number
-        # } else {
-        #   deleted()
-        # }
-        # root = str_line_number
-        # root = count("line_counter").string()
 
         
 output:

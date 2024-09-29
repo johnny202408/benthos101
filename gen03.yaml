@@ -1,0 +1,24 @@
+input:
+  generate:
+    mapping: |
+      root = {"value": random_int()}
+    interval: 1s
+    count: 10
+
+pipeline:
+  processors:
+    - switch:
+        cases:
+          - check: 'this.value % 2 == 0'
+            processors:
+              - text:
+                  operator: set
+                  value: "Even number"
+          - check: 'this.value % 2 != 0'
+            processors:
+              - text:
+                  operator: set
+                  value: "Odd number"
+
+output:
+  stdout: {}

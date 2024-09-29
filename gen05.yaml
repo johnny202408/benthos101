@@ -1,0 +1,51 @@
+input:
+  generate:
+    mapping: |
+      let my_counter = count("key_counter")
+      let my_zero = 1 - 1
+      root.id = 1000000 + $my_counter
+      root.key = $my_counter
+      root.name = "Johnny"
+
+      if $my_counter == 3 {
+        throw("Division by zero error")
+      } else {
+        root.failed = 1 / $my_zero
+      }
+
+      # divide by zero
+      # root.failed = 1 / $my_zero
+
+    interval: 250ms
+    count: 5
+  processors:
+  - log:
+      level: INFO
+      message: Processing line 
+  - catch:
+    - log:
+        level: ERROR 
+        message: "Process ERROR due to ${!error()}"
+
+
+
+output:
+  switch:
+    cases:
+      - check: errored()
+        output:
+          file:
+            path: /output/errors.txt
+          # stdout:
+          #   codec: lines
+      - check: root.name.contains("Johnny").catch(true)
+        output:
+          # file:
+          #   path: /output/out.txt
+          stdout:
+            codec: lines
+
+logger:
+  level: DEBUG
+  add_timestamp: true
+

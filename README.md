@@ -1,5 +1,8 @@
 # Chuck Norris example for Benthos
 
+### Benthos bloblang tutorial
+https://v4.benthos.dev/docs/guides/bloblang/walkthrough
+
 ### create a docker network
 ```
 docker network create benthos-network
@@ -56,11 +59,29 @@ docker run -d --name kafka -p 9092:9092 --env KAFKA_ZOOKEEPER_CONNECT=localhost:
 
 ### Run a generate example
 ```
-docker run --rm --name benthos01 -v c:\\dev\\benthos101\\gen_01.yaml:/benthos.yaml jeffail/benthos
+docker run --rm --name benthos01 -v c:\\dev\\benthos101\\gen01.yaml:/benthos.yaml jeffail/benthos
+
+docker run --rm --name benthos01 -v c:\\dev\\benthos101\\gen02.yaml:/benthos.yaml jeffail/benthos
 
 ```
 
 
 ### group by example
 https://stackoverflow.com/questions/71084761/how-to-use-group-by-value-to-create-batches-in-benthos
+
+
+### access kafka
+```
+/usr/bin/kafka-console-consumer \
+--bootstrap-server broker:9092 \
+--topic chucknorris_jokes \
+--from-beginning
+
+
+/opt/bitnami/kafka/bin/kafka-run-class.sh kafka.tools.GetOffsetShell --bootstrap-server localhost:9092 --topic chucknorris_jokes --time -1
+
+kafka-topics.sh --bootstrap-server localhost:9092 --list
+
+```
+
 

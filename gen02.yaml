@@ -1,0 +1,53 @@
+input:
+  generate:
+    count: 9
+    interval: 300ms
+    mapping: |
+      root.id = count("generated")
+      root.message = "Hello, world!"
+      root.meh = "ok"
+
+      root.key = if count("key_counter") % 3 == 0 {
+        "hello"
+      } else {
+        "there"
+      }
+
+      root.content = uuid_v4()
+      root.team_info = "bojack " + uuid_v4()
+      
+# pipeline:
+#   processors:
+#     - branch:
+#         request_map: |
+#           root = this
+#         processors:
+#           - bloblang: |
+#               root.status = if this.id % 2 == 0 { "even" } else { "odd" }
+
+output:
+  switch:
+    cases:
+      - check: 'errored()'
+        output:
+          stdout:
+            codec: lines
+      - check: root.key.contains("hello").catch(true)
+        # log:
+        #   message: "hello msg"
+        output:
+          stdout:
+            codec: lines
+      - check: root.meh.contains("hello").catch(true)
+        output:
+          stdout:
+            codec: lines
+      - output:
+          stdout:
+            codec: lines
+  # stdout:
+  #   codec: lines
+    # No codec, just standard output
+logger:
+  level: DEBUG
+  add_timestamp: true

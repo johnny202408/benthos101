@@ -1,0 +1,35 @@
+input:
+  generate:
+    count: 5
+    interval: 1s
+    mapping: |
+      root.id = count("generated")
+      root.message = "This is a test message"
+
+pipeline:
+  processors:
+    - branch:
+        request_map: |
+          root = this
+        processors:
+          - switch:
+              parts:
+                - condition:
+                    bloblang: 'this.id % 2 == 0'
+                  processors:
+                    - log:
+                        level: INFO
+                        message: "Message ID ${!json_field:id} is even."
+                    - bloblang: |
+                        root.status = "even"
+                - condition:
+                    bloblang: 'this.id % 2 == 1'
+                  processors:
+                    - log:
+                        level: INFO
+                        message: "Message ID ${!json_field:id} is odd."
+                    - bloblang: |
+                        root.status = "odd"
+
+output:
+  stdout: {}
