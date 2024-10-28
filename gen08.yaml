@@ -1,0 +1,23 @@
+input:
+  generate:
+    count: 1
+    mapping: 'root = {}'
+
+pipeline:
+  processors:
+    - http:
+        url: "http://elasticsearch-6.8:9200/_alias/ggg"
+        verb: "HEAD"
+        headers:
+          Accept: "application/json"
+          Content-Type: "application/json"
+
+    - bloblang: |
+        root.alias_exists = this.status == 200
+
+    - log:
+        message: |
+          alias 'ggg' exists: ${! json("alias_exists") }
+
+output:
+  stdout: {}

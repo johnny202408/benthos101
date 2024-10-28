@@ -11,6 +11,20 @@ pipeline:
         meta first_word = this.value.split(" ").index(0).lowercase()
         meta full_joke = this.value
         root = this
+
+        # if $first_word.matches("^[a-zA-Z]+$") {
+        #   this
+        # } else {
+        #   deleted()
+        # }
+
+
+        # if this.meta("first_word") == "There?s" {
+        #   "there"
+        # } else {
+        #   this.meta("first_word")
+        # }
+        
     - log:
         message: "First word: ${! meta(\"first_word\") } || Full joke: ${! meta(\"full_joke\") }"
 
