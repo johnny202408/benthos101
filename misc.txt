@@ -21,5 +21,4 @@ docker ps
 
 
 
-## docker run --name elasticsearch_container --network benthos_network -p 9200:9200 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:6.8.23
 

@@ -13,13 +13,22 @@ input:
 #         path: "joke"
 #         target: "parsed_joke"
 
+pipeline:
+  processors:
+    - mapping: |
+        meta first_word = this.value.split(" ").index(0).lowercase()
+        root = this
+
+    - log:
+        message: "First word: ${! meta(\"first_word\") }"
+
 output:
   # stdout:
   #   codec: lines
   elasticsearch:
     urls:
       - "http://elasticsearch-6.8:9200/"
-    index: "jokes"
+    index: "${!meta(\"first_word\")}"
     type: "_doc"
     id: "${!uuid_v4()}"
     # sniff: false
