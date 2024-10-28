@@ -6,34 +6,22 @@ input:
     headers:
       Content-Type: application/json
 
-
-# pipeline:
-#   processors:
-#     - json_parser:
-#         path: "joke"
-#         target: "parsed_joke"
-
 pipeline:
   processors:
     - mapping: |
         meta first_word = this.value.split(" ").index(0).lowercase()
+        meta full_joke = this.value
         root = this
-
     - log:
-        message: "First word: ${! meta(\"first_word\") }"
+        message: "First word: ${! meta(\"first_word\") } || Full joke: ${! meta(\"full_joke\") }"
 
 output:
-  # stdout:
-  #   codec: lines
   elasticsearch:
     urls:
       - "http://elasticsearch-6.8:9200/"
     index: "${!meta(\"first_word\")}"
     type: "_doc"
     id: "${!uuid_v4()}"
-    # sniff: false
-    # tls:
-    #   enabled: false
 
 logger:
   level: INFO      
