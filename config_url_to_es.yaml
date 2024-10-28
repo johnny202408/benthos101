@@ -1,3 +1,4 @@
+# docker run --name benthos101 --rm -v /mnt/c/dev/benthos101/config_url_to_es.yaml:/benthos.yaml -v /mnt/c/dev/benthos101/input:/input -v /mnt/c/dev/benthos101/output:/output jeffail/benthos:4.24
 input:
   http_client:
     url: https://api.chucknorris.io/jokes/random
@@ -5,16 +6,26 @@ input:
     headers:
       Content-Type: application/json
 
-pipeline:
-  processors:
-    - json_parser:
-        path: "joke"
-        target: "parsed_joke"
+
+# pipeline:
+#   processors:
+#     - json_parser:
+#         path: "joke"
+#         target: "parsed_joke"
 
 output:
+  # stdout:
+  #   codec: lines
   elasticsearch:
-    addresses:
-      - "http://localhost:9200"
+    urls:
+      - "http://elasticsearch-6.8:9200/"
     index: "jokes"
     type: "_doc"
+    id: "${!uuid_v4()}"
+    # sniff: false
+    # tls:
+    #   enabled: false
+
+logger:
+  level: INFO      
     

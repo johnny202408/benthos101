@@ -1,0 +1,25 @@
+
+docker network create benthos_network
+
+docker run -d --name elasticsearch-6.8 -p 9200:9200 -p 9300:9300 --network benthos_network -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:6.8.23
+
+
+curl -X GET "localhost:9200/"
+
+
+/mnt/c/dev/benthos101/
+docker pull jeffail/benthos:4.24
+
+docker run --name benthos101 --rm -v /mnt/c/dev/benthos101/config_url_to_es.yaml:/benthos.yaml -v /mnt/c/dev/benthos101/input:/input -v /mnt/c/dev/benthos101/output:/output --network benthos_network jeffail/benthos:4.24
+
+docker stop benthos101
+
+curl -X GET "http://localhost:9200/jokes/_count?pretty"
+curl -X GET "http://localhost:9200/_cat/indices?v"
+docker stop benthos101
+docker ps
+
+
+
+## docker run --name elasticsearch_container --network benthos_network -p 9200:9200 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:6.8.23
+
