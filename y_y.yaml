@@ -10,7 +10,7 @@ pipeline:
         request_map: 'root = {}'
         processors:
           - http:
-              url: "http://elasticsearch-6.8:9200/_alias/ggg_"
+              url: "http://elasticsearch-6.8:9200/_alias/ggg1"
               verb: GET
               headers:
                 Content-Type: application/json
@@ -18,10 +18,23 @@ pipeline:
               timeout: 5s
           - catch:
             - log:
-                level: ERROR
+                level: WARN
                 message: "alias does not exist"
-        result_map: |
-          root.success = this
+            - mapping: 'root = deleted()'
+            - branch:
+                request_map: 'root = {"index": "bill01-000001", "settings": {"number_of_shards": 1, "number_of_replicas": 1}}'
+                processors:
+                  - http:
+                      url: "http://elasticsearch-6.8:9200/bill01-000001"
+                      verb: PUT
+                      headers:
+                        Content-Type: application/json
+                      retries: 3
+                      timeout: 5s
+                result_map: 'root = this'
+        result_map: 'root = this'
+        # result_map: |
+        #   root.success = this
 
 output:
   stdout: {}

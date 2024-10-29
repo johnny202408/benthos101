@@ -10,7 +10,7 @@ pipeline:
         request_map: 'root = {}'
         processors:
           - http:
-              url: "http://elasticsearch-6.8:9200/_alias/ggg"
+              url: "http://elasticsearch-6.8:9200/_alias/ggg1"
               verb: GET
               headers:
                 Content-Type: application/json
@@ -18,8 +18,9 @@ pipeline:
               timeout: 5s
           - catch:
             - log:
-                level: ERROR
+                level: WARN
                 message: "alias does not exist"
+            - mapping: 'root = deleted()'
         result_map: |
           root.success = this
 
