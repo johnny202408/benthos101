@@ -6,7 +6,6 @@ input:
 
 pipeline:
   processors:
-
     - branch:
         request_map: 'root = {}'
         processors:
@@ -17,7 +16,12 @@ pipeline:
                 Content-Type: application/json
               retries: 3
               timeout: 5s
-        result_map: 'root = this'
+          - catch:
+            - log:
+                level: ERROR
+                message: "alias does not exist"
+        result_map: |
+          root.success = this
 
 output:
   stdout: {}

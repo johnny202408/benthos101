@@ -16,9 +16,12 @@ pipeline:
                 Content-Type: application/json
               retries: 3
               timeout: 5s
+          - catch:
+            - log:
+                level: ERROR
+                message: "alias does not exist"
         result_map: |
           root.success = this
-          # root.error = if(this.status == 404, "Alias not found.", "An error occurred.")
 
 output:
   stdout: {}
