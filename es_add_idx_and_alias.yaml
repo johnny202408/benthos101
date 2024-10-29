@@ -1,0 +1,34 @@
+input:
+  generate:
+    count: 1
+    interval: 60s
+    mapping: 'root = {}'
+
+pipeline:
+  processors:
+    - branch:
+        request_map: 'root = {"index": "jack-000001", "settings": {"number_of_shards": 1, "number_of_replicas": 1}}'
+        processors:
+          - http:
+              url: "http://elasticsearch-6.8:9200/jack1-000001"
+              verb: PUT
+              headers:
+                Content-Type: application/json
+              retries: 3
+              timeout: 5s
+        result_map: 'root = this'
+
+    - branch:
+        request_map: 'root = {"actions": [{"add": {"index": "jack-000001", "alias": "jack1_a", "is_write_index": true}}]}'
+        processors:
+          - http:
+              url: "http://elasticsearch-6.8:9200/_aliases"
+              verb: POST
+              headers:
+                Content-Type: application/json
+              retries: 3
+              timeout: 5s
+        result_map: 'root = this'
+
+output:
+  stdout: {}
