@@ -1,0 +1,23 @@
+pipeline:
+  processors:
+    - bloblang: |
+        root = {
+          "actions": [
+            {
+              "add": {
+                "index": "norman",
+                "alias": "norman_a"
+              }
+            }
+          ]
+        }
+
+output:
+  http_client:
+    url: "http://elasticsearch-6.8:9200/_aliases"
+    verb: PUT
+    headers:
+      Content-Type: "application/json"
+    max_retry_backoff: 5s
+    retries: 3
+ 

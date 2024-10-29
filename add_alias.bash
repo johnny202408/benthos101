@@ -3,9 +3,10 @@ curl -X POST "http://localhost:9200/_aliases" -H 'Content-Type: application/json
   "actions": [
     {
       "add": {
-        "index": "jokes",
-        "alias": "ggg"
+        "index": "norman",
+        "alias": "norman_a"
       }
     }
   ]
 }'
+
