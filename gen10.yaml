@@ -3,7 +3,7 @@ pipeline:
     - branch:
         processors:
           - log:
-              message: "Builing PUT command"
+              message: "Building PUT command"
           - bloblang: |
               root = {
                 "actions": [

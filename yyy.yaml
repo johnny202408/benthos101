@@ -1,0 +1,43 @@
+input:
+  generate:
+    count: 1
+    interval: 60s
+    mapping: 'root = {}'
+
+pipeline:
+  processors:
+    - branch:
+        request_map: 'root = {"actions": [{"get": {"index": "bill04-000001", "alias": "bill04_a"}}]}'
+        processors:
+          - http:
+              url: "http://elasticsearch-6.8:9200/_aliases"
+              verb: GET
+              headers:
+                Content-Type: application/json
+              retries: 3
+              timeout: 5s
+          - branch:
+              request_map: 'root.exists = this.[] != null'
+              processors:
+                - http:
+                    url: "http://elasticsearch-6.8:9200/_aliases"
+                    verb: POST
+                    headers:
+                      Content-Type: application/json
+                    body: '{
+                      "actions": [
+                        {
+                          "add": {
+                            "index": "bill04-000001",
+                            "alias": "bill04_a",
+                            "is_write_index": true
+                          }
+                        }
+                      ]
+                    }'
+                    retries: 3
+                    timeout: 5s
+        result_map: 'root = this'
+
+output:
+  stdout: {}
