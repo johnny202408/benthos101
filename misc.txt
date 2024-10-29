@@ -24,5 +24,7 @@ docker stop benthos101 ; curl -X GET "http://localhost:9200/_cat/indices?v"
 
 docker stop benthos101 ; curl -X GET "http://localhost:9200/_cat/indices?v" | grep -v "1          1 "
 
+docker stop benthos101 ; curl -X GET "http://localhost:9200/_cat/indices?v" | grep -v "1          1 " | sort ; curl -X GET "http://localhost:9200/_cat/aliases?v"
+
 docker run --name benthos101 --rm -v /mnt/c/dev/benthos101/gen06.yaml:/benthos.yaml -v /mnt/c/dev/benthos101/input:/input -v /mnt/c/dev/benthos101/output:/output --network benthos_network jeffail/benthos:4.24
 
