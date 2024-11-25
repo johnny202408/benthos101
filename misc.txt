@@ -2,7 +2,7 @@
 docker network create benthos_network
 
 docker run -d --name elasticsearch-6.8 -p 9200:9200 -p 9300:9300 --network benthos_network -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:6.8.23
-
+docker start --name elasticsearch-6.8
 
 curl -X GET "localhost:9200/"
 
@@ -22,9 +22,19 @@ docker ps
 docker stop benthos101 ; curl -X GET "http://localhost:9200/_cat/indices?v"
 
 
+curl -X GET "http://localhost:9200/_cat/aliases?v" | sort 
+
 docker stop benthos101 ; curl -X GET "http://localhost:9200/_cat/indices?v" | grep -v "1          1 "
 
 docker stop benthos101 ; curl -X GET "http://localhost:9200/_cat/indices?v" | grep -v "1          1 " | sort ; curl -X GET "http://localhost:9200/_cat/aliases?v"
 
 docker run --name benthos101 --rm -v /mnt/c/dev/benthos101/gen06.yaml:/benthos.yaml -v /mnt/c/dev/benthos101/input:/input -v /mnt/c/dev/benthos101/output:/output --network benthos_network jeffail/benthos:4.24
 
+docker run --name benthos101 --rm -v /mnt/c/dev/benthos101/check_alias_exist.yaml:/benthos.yaml -v /mnt/c/dev/benthos101/input:/input -v /mnt/c/dev/benthos101/output:/output --network benthos_network jeffail/benthos:4.24
+
+docker run --name benthos101 --rm -v /mnt/c/dev/benthos101/es_add_idx_and_alias.yaml:/benthos.yaml -v /mnt/c/dev/benthos101/input:/input -v /mnt/c/dev/benthos101/output:/output --network benthos_network jeffail/benthos:4.24
+
+
+
+docker run --name benthos101 --rm -v /mnt/c/dev/benthos101/alias_exists.yaml:/benthos.yaml -v /mnt/c/dev/benthos101/input:/input -v /mnt/c/dev/benthos101/output:/output --network benthos_network jeffail/benthos:4.24
+docker run --name benthos101 --rm -v /mnt/c/dev/benthos101/alias_does_not_exist.yaml:/benthos.yaml -v /mnt/c/dev/benthos101/input:/input -v /mnt/c/dev/benthos101/output:/output --network benthos_network jeffail/benthos:4.24

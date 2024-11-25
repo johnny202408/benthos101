@@ -3,8 +3,8 @@ curl -X POST "http://localhost:9200/_aliases" -H 'Content-Type: application/json
   "actions": [
     {
       "add": {
-        "index": "norman",
-        "alias": "norman_a"
+        "index": "norman1",
+        "alias": "norman1_a"
       }
     }
   ]
